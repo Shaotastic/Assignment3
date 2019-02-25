@@ -12,6 +12,9 @@ Board::~Board()
 
 void Board::UpdateBoard(char playerInput, int row, int col)
 {
+	//std::cout << "\a";
+	
+
 	if (playerInput == 'X' || playerInput == 'O' && !gameDone)
 	{
 		if (row >= 1 && row <= 3)
@@ -116,7 +119,7 @@ char Board::CheckVictory(char ty)
 			return ty;
 		}
 
-		else if (board[2] == ty && board[4] == ty && board[7] == ty)
+		else if (board[1] == ty && board[4] == ty && board[7] == ty)
 		{
 			return ty;
 		}
@@ -142,73 +145,23 @@ char Board::CheckVictory(char ty)
 		return NULL;
 }
 
-char Board::PotentialVictory(char ty)
+void Board::GameFinished(char ty)
 {
-	int count = 0;
-
-	for (int i = 0; i < boardSize; i++)
+	if(CheckVictory(ty) == 'X')
 	{
-		if (board[i] != NULL)
-		{
-			count++;
-		}
-		else
-			break;
+		gameDone = true;
+		std::cout << "***Winner is player X!***\n" << std::endl;
 	}
-
-	if (count == boardSize)
-		return 'D';
-
-	if (ty == 'X' || ty == 'O')
+	else if(CheckVictory(ty) == 'O')
 	{
-		if(board[0] == ty)
-		{
-		}
-
-		if (board[0] == ty && board[1] == ty && board[2] == ty)
-		{
-			return ty;
-		}
-
-		else if (board[3] == ty && board[4] == ty && board[5] == ty)
-		{
-			return ty;
-		}
-
-		else if (board[6] == ty && board[7] == ty && board[8] == ty)
-		{
-			return ty;
-		}
-
-		else if (board[0] == ty && board[3] == ty && board[6] == ty)
-		{
-			return ty;
-		}
-
-		else if (board[2] == ty && board[4] == ty && board[7] == ty)
-		{
-			return ty;
-		}
-
-		else if (board[2] == ty && board[5] == ty && board[8] == ty)
-		{
-			return ty;
-		}
-
-		else if (board[0] == ty && board[4] == ty && board[8] == ty)
-		{
-			return ty;
-		}
-
-		else if (board[2] == ty && board[4] == ty && board[6] == ty)
-		{
-			return ty;
-		}
-		else
-			return NULL;
+		gameDone = true;
+		std::cout << "***Winner is player O!***\n" << std::endl;
 	}
-	else
-		return NULL;
+	else if(CheckVictory(ty) == 'D')
+	{
+		gameDone = true;
+		std::cout << "***DRAW!***\n" << std::endl;
+	}
 }
 
 void Board::NextTurn()

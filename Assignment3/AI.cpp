@@ -12,16 +12,14 @@ AI::~AI()
 }
 AI::AIMove AI::GetMoves(Board &board, char &player)
 {
-	Board tempBoard = board;
-
 	if (board.CheckVictory(aiLetter) == aiLetter)
 		return AIMove(10);
 	else if (board.CheckVictory(playerLetter) == playerLetter)
 		return AIMove(-10);
-	else if(board.CheckVictory(player) == 'D')
+	else if (board.CheckVictory(player) == 'D')
 		return AIMove(0);
 
-	std::vector<AIMove> woah;
+	std::vector<AIMove> moves;
 
 	for (int i = 0; i < board.BoardSize(); i++)
 	{
@@ -36,39 +34,73 @@ AI::AIMove AI::GetMoves(Board &board, char &player)
 				move.score = GetMoves(board, playerLetter).score;
 			else if (player == playerLetter)
 				move.score = GetMoves(board, aiLetter).score;
-			woah.push_back(move);
+			moves.push_back(move);
 			board.UpdateBoard(NULL, i);
 		}
 	}
 	int bestMove = 0;
 
-	if (board.currentPlayer == aiLetter)
+	if (player == aiLetter)
 	{
 		int bestScore = -100;
-		for (int i = 0; i < woah.size(); i++)
+		for (int i = 0; i < moves.size(); i++)
 		{
-			if (woah[i].score > bestScore)
+			if (moves[i].score > bestScore)
 			{
 				bestMove = i;
-				bestScore = woah[i].score;
+				bestScore = moves[i].score;
 			}
 		}
 	}
 	else
 	{
 		int bestScore = 100;
-		for (int i = 0; i < woah.size(); i++)
+		for (int i = 0; i < moves.size(); i++)
 		{
-			if (woah[i].score < bestScore)
+			if (moves[i].score < bestScore)
 			{
 				bestMove = i;
-				bestScore = woah[i].score;
+				bestScore = moves[i].score;
 			}
 		}
 	}
 
 
-	return woah[bestMove];
+	return moves[bestMove];
+}
+
+AI::AIMove AI::GetMoves(Board & board, char & player, int maxDepth, int currentDpeth, int alpha, int beta)
+{
+	if (board.CheckVictory(aiLetter) == aiLetter)
+		return AIMove(10);
+	else if (board.CheckVictory(playerLetter) == playerLetter)
+		return AIMove(-10);
+	else if (board.CheckVictory(player) == 'D')
+		return AIMove(0);
+
+	std::vector<AIMove> moves;
+
+	int bestScore = 100;
+
+	for (int i = 0; i < board.BoardSize(); i++)
+	{
+
+		if (board.GetBoard()[i] == NULL)
+		{
+			AIMove move;
+			move.index = i;
+			board.UpdateBoard(player, i);
+
+			if (player == aiLetter)
+				move.score = GetMoves(board, playerLetter, 10, currentDpeth+1, -alpha, Max(alpha, bestScore)).score;
+			else if (player == playerLetter)
+				move.score = GetMoves(board, aiLetter).score;
+			moves.push_back(move);
+			board.UpdateBoard(NULL, i);
+		}
+	}
+
+	return AIMove();
 }
 
 void AI::MakeMove(Board &board)
@@ -89,7 +121,7 @@ void AI::SetAI(char value)
 	if (aiLetter == 'X')
 		playerLetter = 'O';
 	else if (aiLetter == 'O')
-		playerLetter == 'X';
+		playerLetter = 'X';
 }
 
 int AI::Score(Board board)

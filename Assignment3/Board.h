@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-
+#include <Windows.h>
 class Board
 {
 public:
@@ -20,7 +20,7 @@ public:
 	}
 
 	char CheckVictory(char ty);
-	char PotentialVictory(char ty);
+	void GameFinished(char ty);
 
 	char currentPlayer;
 	void NextTurn();

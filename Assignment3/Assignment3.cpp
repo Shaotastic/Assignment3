@@ -1,9 +1,9 @@
 // Assignment3.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
-
 #include <iostream>
 #include <iomanip> 
 #include <string>
+#include <Windows.h>
 #include "Board.h"
 #include "AI.h"
 
@@ -37,7 +37,7 @@ int main()
 		}
 	}
 
-	std::cout << "Player is: " << player << " | Bot is: " << ai.GetLetter() << std::endl;
+	std::cout << "\nPlayer is: " << player << " | Bot is: " << ai.GetLetter() << std::endl << std::endl;
 
 	board.DisplayBoard();
 
@@ -51,7 +51,9 @@ int main()
 	{
 		if (board.currentPlayer == player)
 		{
+			Beep(900, 500);
 			PlayerTurn();
+			board.GameFinished(player);
 			board.NextTurn();
 		}
 
@@ -59,17 +61,11 @@ int main()
 		{
 			ai.MakeMove(board);
 			system("cls");
+			board.GameFinished(ai.GetLetter());
 			board.DisplayBoard();
-		
+			Beep(200, 500);
 		}
 	}
-
-	if (board.GameWon())
-	{
-		std::cout << "\nWinner is " << board.currentPlayer << std::endl;
-	}
-	else
-		std::cout << "Game ended in a draw" << std::endl;
 
 
 	system("pause");
