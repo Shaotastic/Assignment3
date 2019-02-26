@@ -34,6 +34,7 @@ AI::AIMove AI::GetMoves(Board &board, char &player)
 				move.score = GetMoves(board, playerLetter).score;
 			else if (player == playerLetter)
 				move.score = GetMoves(board, aiLetter).score;
+
 			moves.push_back(move);
 			board.UpdateBoard(NULL, i);
 		}
@@ -69,45 +70,67 @@ AI::AIMove AI::GetMoves(Board &board, char &player)
 	return moves[bestMove];
 }
 
-AI::AIMove AI::GetMoves(Board & board, char & player, int maxDepth, int currentDpeth, int alpha, int beta)
-{
-	if (board.CheckVictory(aiLetter) == aiLetter)
-		return AIMove(10);
-	else if (board.CheckVictory(playerLetter) == playerLetter)
-		return AIMove(-10);
-	else if (board.CheckVictory(player) == 'D')
-		return AIMove(0);
+AI::AIMove AI::GetMoves(Board & board, char & player, int maxDepth, int alpha, int beta, int index)
+ {
+	Board tempBoard = board;
 
-	std::vector<AIMove> moves;
+	if (tempBoard.CheckVictory(aiLetter) == aiLetter || maxDepth == 0)
+		return AIMove(index, 10);
+	else if (tempBoard.CheckVictory(playerLetter) == playerLetter || maxDepth == 0)
+		return AIMove(index, -10);
+	else if (tempBoard.CheckVictory(player) == 'D' || maxDepth == 0)
+		return AIMove(index, 0);
 
-	int bestScore = 100;
+	AIMove move;
 
-	for (int i = 0; i < board.BoardSize(); i++)
+	if (player == aiLetter)
 	{
-
-		if (board.GetBoard()[i] == NULL)
+		for (int i = 0; i < tempBoard.BoardSize(); i++)
 		{
-			AIMove move;
-			move.index = i;
-			board.UpdateBoard(player, i);
-
-			if (player == aiLetter)
-				move.score = GetMoves(board, playerLetter, 10, currentDpeth+1, -alpha, Max(alpha, bestScore)).score;
-			else if (player == playerLetter)
-				move.score = GetMoves(board, aiLetter).score;
-			moves.push_back(move);
-			board.UpdateBoard(NULL, i);
+			int maxVal = -100;
+			if (tempBoard.GetBoard()[i] == NULL)
+			{
+				tempBoard.UpdateBoard(player, i);
+				move.index = i;
+				move.score = 0;
+				move = GetMoves(tempBoard, playerLetter, maxDepth - 1, alpha, beta, i);
+				//move.index = i;
+				maxVal = max(maxVal, move.score);
+				alpha = max(alpha, maxVal);
+				if (alpha >= beta)
+					break;
+			}
 		}
+		return move;
 	}
-
-	return AIMove();
+	else if(player == playerLetter)
+	{
+		for (int i = 0; i < tempBoard.BoardSize(); i++)
+		{
+			int minVal = 100;
+			if (tempBoard.GetBoard()[i] == NULL)
+			{
+				tempBoard.UpdateBoard(player, i);
+				move.index = i;
+				move.score = 0;
+				move = GetMoves(tempBoard, aiLetter, maxDepth - 1, alpha, beta, i);
+				//move.index = i;
+				minVal = min(minVal, move.score);
+				beta = min(beta, minVal);
+				if (alpha >= beta)
+					break;
+			}
+		}
+		return move;
+	}
 }
 
 void AI::MakeMove(Board &board)
 {
 	if (!board.GameDone())
 	{
-		AIMove newMove = GetMoves(board, aiLetter);
+		//AIMove newMove = GetMoves(board, aiLetter);
+		AIMove newMove = GetMoves(board, aiLetter, 2, -INFINITY, INFINITY, 0);
 
 		board.UpdateBoard(aiLetter, newMove.index);
 		board.NextTurn();

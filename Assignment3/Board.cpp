@@ -3,36 +3,50 @@
 
 Board::Board()
 {
+	rlutil::saveDefaultColor();
 }
 
 
 Board::~Board()
-{
-}
+{}
 
 void Board::UpdateBoard(char playerInput, int row, int col)
 {
 	//std::cout << "\a";
-	
+
 
 	if (playerInput == 'X' || playerInput == 'O' && !gameDone)
 	{
 		if (row >= 1 && row <= 3)
 		{
+			int index;
 			if (row == 1)
 			{
-				if (board[(row + col) - 2] == NULL)
-					board[(row + col) - 2] = playerInput;
+				index = (row + col) - 2;
+				if (board[index] == NULL)
+					board[index] = playerInput;
+				else
+				{
+
+				}
 			}
 			else if (row == 2)
 			{
-				if (board[row + col] == NULL)
-					board[row + col] = playerInput;
+				index = row + col;
+				if (board[index] == NULL)
+					board[index] = playerInput;
+				else
+				{
+
+				}
 			}
 			else if (row == 3)
 			{
-				if (board[(row + col) + 2] == NULL)
-					board[row + col + 2] = playerInput;
+				index = (row + col) + 2;
+				if (board[index] == NULL)
+					board[index] = playerInput;
+				else
+				{}
 			}
 
 			CheckVictory(playerInput);
@@ -55,13 +69,13 @@ void Board::UpdateBoard(char t, int index)
 			{
 				board[index] = t;
 			}
-			else if(board[index] != NULL && t == NULL)
+			else if (board[index] != NULL && t == NULL)
 			{
 				board[index] = NULL;
 			}
 			CheckVictory(t);
-			//system("cls");
-			//DisplayBoard();
+			system("cls");
+			DisplayBoard();
 			//NextTurn();
 		}
 	}
@@ -70,21 +84,159 @@ void Board::UpdateBoard(char t, int index)
 
 void Board::DisplayBoard()
 {
+	rlutil::resetColor();
 	std::cout << "    1   2   3" << std::endl;
 	std::cout << "  -------------" << std::endl;
-	std::cout << "1 | " << board[0] << " | " << board[1] << " | " << board[2] << " |" << std::endl;
+	std::cout << "1 | ";
+
+	if (board[0] == 'X')
+		rlutil::setColor(10);
+	else if (board[0] == 'O')
+		rlutil::setColor(5);
+
+	std::cout << board[0];
+
+	rlutil::resetColor();
+
+	std::cout << " | ";
+
+	if (board[1] == 'X')
+		rlutil::setColor(10);
+	else if (board[1] == 'O')
+		rlutil::setColor(5);
+
+	std::cout << board[1];
+
+	rlutil::resetColor();
+
+	std::cout << " | ";
+
+	if (board[2] == 'X')
+		rlutil::setColor(10);
+	else if (board[2] == 'O')
+		rlutil::setColor(5);
+
+	std::cout << board[2];
+
+	rlutil::resetColor();
+	std::cout << " |" << std::endl;
 	std::cout << "  -------------" << std::endl;
-	std::cout << "2 | " << board[3] << " | " << board[4] << " | " << board[5] << " |" << std::endl;
+	std::cout << "2 | ";
+
+	if (board[3] == 'X')
+		rlutil::setColor(10);
+	else if (board[3] == 'O')
+		rlutil::setColor(5);
+
+	std::cout << board[3];
+
+	rlutil::resetColor();
+
+	std::cout << " | ";
+
+	if (board[4] == 'X')
+		rlutil::setColor(10);
+	else if (board[4] == 'O')
+		rlutil::setColor(5);
+
+	std::cout << board[4];
+
+	rlutil::resetColor();
+
+	std::cout << " | ";
+
+	if (board[5] == 'X')
+		rlutil::setColor(10);
+	else if (board[5] == 'O')
+		rlutil::setColor(5);
+
+	std::cout << board[5];
+
+	rlutil::resetColor();
+
+	std::cout << " |" << std::endl;
+
+
 	std::cout << "  -------------" << std::endl;
-	std::cout << "3 | " << board[6] << " | " << board[7] << " | " << board[8] << " |" << std::endl;
+	std::cout << "3 | ";
+
+	if (board[6] == 'X')
+		rlutil::setColor(10);
+	else if (board[6] == 'O')
+		rlutil::setColor(5);
+
+	std::cout << board[6];
+
+	rlutil::resetColor();
+
+	std::cout << " | ";
+
+	if (board[7] == 'X')
+		rlutil::setColor(10);
+	else if (board[7] == 'O')
+		rlutil::setColor(5);
+
+	std::cout << board[7];
+
+	rlutil::resetColor();
+
+	std::cout << " | ";
+
+	if (board[8] == 'X')
+		rlutil::setColor(10);
+	else if (board[8] == 'O')
+		rlutil::setColor(5);
+
+	std::cout << board[8];
+
+	rlutil::resetColor();
+
+	std::cout << " |" << std::endl;
 	std::cout << "  -------------" << std::endl;
+	rlutil::resetColor();
+}
+
+bool Board::SpotCheck(char playerInput, int row, int col)
+{
+	if (playerInput == 'X' || playerInput == 'O' && !gameDone)
+	{
+		if (row >= 1 && row <= 3)
+		{
+			int index;
+			if (row == 1)
+			{
+				index = (row + col) - 2;
+				if (board[index] == NULL)
+					return true;
+				else
+					return false;
+			}
+			else if (row == 2)
+			{
+				index = row + col;
+				if (board[index] == NULL)
+					return true;
+				else
+					return false;
+			}
+			else if (row == 3)
+			{
+				index = (row + col) + 2;
+				if (board[index] == NULL)
+					return true;
+				else
+					return false;
+			}
+		}
+	}
+	return false;
 }
 
 char Board::CheckVictory(char ty)
 {
 	int count = 0;
 
-	for(int i = 0; i < boardSize; i++)
+	for (int i = 0; i < boardSize; i++)
 	{
 		if (board[i] != NULL)
 		{
@@ -93,9 +245,6 @@ char Board::CheckVictory(char ty)
 		else
 			break;
 	}
-
-	if (count == boardSize)
-		return 'D';
 
 	if (ty == 'X' || ty == 'O')
 	{
@@ -138,28 +287,31 @@ char Board::CheckVictory(char ty)
 		{
 			return ty;
 		}
-		else
-			return NULL;
 	}
+	if (count == boardSize)
+		return 'D';
 	else
 		return NULL;
 }
 
 void Board::GameFinished(char ty)
 {
-	if(CheckVictory(ty) == 'X')
+	if (CheckVictory(ty) == 'X')
 	{
 		gameDone = true;
+		rlutil::setColor(10);
 		std::cout << "***Winner is player X!***\n" << std::endl;
 	}
-	else if(CheckVictory(ty) == 'O')
+	else if (CheckVictory(ty) == 'O')
 	{
 		gameDone = true;
+		rlutil::setColor(5);
 		std::cout << "***Winner is player O!***\n" << std::endl;
 	}
-	else if(CheckVictory(ty) == 'D')
+	else if (CheckVictory(ty) == 'D')
 	{
 		gameDone = true;
+		rlutil::setColor(12);
 		std::cout << "***DRAW!***\n" << std::endl;
 	}
 }
@@ -178,16 +330,4 @@ void Board::NextTurn()
 char* Board::GetBoard()
 {
 	return board;
-}
-
-void Board::BoardFull()
-{
-	for (int i = 0; i < 9; i++)
-	{
-		if (board[i] == NULL)
-			break;
-		else
-			gameDone = true;
-	}
-
 }

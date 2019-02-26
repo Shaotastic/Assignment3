@@ -6,6 +6,7 @@
 #include <Windows.h>
 #include "Board.h"
 #include "AI.h"
+#include "rlutil.h"
 
 void PlayerTurn();
 bool gameStart = false;
@@ -18,7 +19,7 @@ int main()
 {
 	std::cout << "==========Tic Tac Toe==========" << std::endl;
 	std::cout << "\n\nWelcome to Tic Tac Toe, X's or O's?" << std::endl << std::endl;
-
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	while (true)
 	{
 		std::cin >> std::setw(1) >> player;
@@ -51,18 +52,20 @@ int main()
 	{
 		if (board.currentPlayer == player)
 		{
-			Beep(900, 500);
+			Beep(500, 500);
+
+			if(player == 'X')
+				rlutil::setColor(10);
+			else
+				rlutil::setColor(5);
+
 			PlayerTurn();
-			board.GameFinished(player);
-			board.NextTurn();
 		}
 
 		else if (board.currentPlayer == ai.GetLetter())
 		{
 			ai.MakeMove(board);
-			system("cls");
 			board.GameFinished(ai.GetLetter());
-			board.DisplayBoard();
 			Beep(200, 500);
 		}
 	}
@@ -80,19 +83,10 @@ void PlayerTurn()
 	std::cout << "Enter the column number: ";
 	std::cin >> second;
 
-	board.UpdateBoard(player, first, second);
+	if (board.SpotCheck(player, first, second))
+	{
+		board.UpdateBoard(player, first, second);
+		board.GameFinished(player);
+		board.NextTurn();
+	}
 }
-
-
-
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file

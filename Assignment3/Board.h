@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <Windows.h>
+#include "rlutil.h"
 class Board
 {
 public:
@@ -18,6 +19,8 @@ public:
 	{
 		return gameWon;
 	}
+
+	bool SpotCheck(char playerInput, int row, int col);
 
 	char CheckVictory(char ty);
 	void GameFinished(char ty);
