@@ -57,7 +57,7 @@ void Board::UpdateBoard(char playerInput, int row, int col)
 	}
 }
 
-void Board::UpdateBoard(char t, int index)
+void Board::UpdateBoard(char t, int index, bool draw)
 {
 	//BoardFull();
 
@@ -74,8 +74,11 @@ void Board::UpdateBoard(char t, int index)
 				board[index] = NULL;
 			}
 			CheckVictory(t);
-			system("cls");
-			DisplayBoard();
+			if (draw)
+			{
+				system("cls");
+				DisplayBoard();
+			}
 			//NextTurn();
 		}
 	}

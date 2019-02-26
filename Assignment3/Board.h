@@ -8,7 +8,7 @@ public:
 	Board();
 	~Board();
 	void UpdateBoard(char t, int row, int col);
-	void UpdateBoard(char t, int index);
+	void UpdateBoard(char t, int index, bool draw);
 	void DisplayBoard();
 	bool GameDone()
 	{
@@ -37,13 +37,9 @@ public:
 
 private:
 
-	void BoardFull();
-
 	bool gameDone, gameWon;
 	const static int boardSize = 9;
 	char board[boardSize];
 	int turns = 0;
-
-	//char board[numRow][numCol] = {0};
 };
 

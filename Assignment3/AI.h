@@ -24,32 +24,31 @@ public:
 	AI();
 	~AI();
 
-	AIMove GetMoves(Board &board, char &player);
-	AIMove GetMoves(Board &board, char &player, int maxDepth, int alpha, int beta, int index);
-
-	int Max(int a, int b)
-	{
-		return ((a) > (b)) ? (a) : (b);
-	}
-
-	int Min(int a, int b)
-	{
-		return ((a) < (b)) ? (b) : (a);
-	}
+	AIMove GetMoves(Board &board, char &player, int maxDepth); //Uses the Minimax Algorithm
+	AIMove GetMoves(Board &board, char &player, int maxDepth, int alpha, int beta, int index); //Uses AB Pruning
 
 	void MakeMove(Board &board);
-
 	void SetAI(char value);
+	void SetDifficulty(int value)
+	{
+		maxDepth = value;
+	}
+
+	void SetAlgorithm(int x)
+	{
+		algorithm = x;
+	}
 
 	char GetLetter()
 	{
 		return aiLetter;
 	}
 
-	int Score(Board board);
+
 
 private:
 	char aiLetter, playerLetter;
-	int currentScore, bestScore;
+	int maxDepth = 0;
+	int algorithm = 0;
 };
 

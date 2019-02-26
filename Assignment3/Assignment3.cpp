@@ -6,9 +6,9 @@
 #include <Windows.h>
 #include "Board.h"
 #include "AI.h"
-#include "rlutil.h"
 
 void PlayerTurn();
+void IntializeAI();
 bool gameStart = false;
 char player;
 std::string input;
@@ -19,7 +19,7 @@ int main()
 {
 	std::cout << "==========Tic Tac Toe==========" << std::endl;
 	std::cout << "\n\nWelcome to Tic Tac Toe, X's or O's?" << std::endl << std::endl;
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
 	while (true)
 	{
 		std::cin >> std::setw(1) >> player;
@@ -38,6 +38,8 @@ int main()
 		}
 	}
 
+	IntializeAI();
+
 	std::cout << "\nPlayer is: " << player << " | Bot is: " << ai.GetLetter() << std::endl << std::endl;
 
 	board.DisplayBoard();
@@ -54,7 +56,7 @@ int main()
 		{
 			Beep(500, 500);
 
-			if(player == 'X')
+			if (player == 'X')
 				rlutil::setColor(10);
 			else
 				rlutil::setColor(5);
@@ -88,5 +90,44 @@ void PlayerTurn()
 		board.UpdateBoard(player, first, second);
 		board.GameFinished(player);
 		board.NextTurn();
+	}
+}
+
+void IntializeAI()
+{
+	std::cout << "\nSelect bot difficulty:\nMiniMax = 1, AB = 2" << std::endl;
+	int al = 0;
+	int diff = 0;
+	while (true)
+	{
+		std::cin >> al;
+		if (al != 1 && al != 2)
+			std::cout << "Input invalid, please select the appropriate option." << std::endl;
+		else if (al == 1)
+		{
+			ai.SetAlgorithm(2);
+			break;
+		}
+		else if (al == 2)
+		{
+			ai.SetAlgorithm(2);
+			break;
+		}
+	}
+
+	std::cout << "\nSelect bot depth search length from 1-10." << std::endl;
+
+	while (true)
+	{
+		std::cin >> diff;
+
+		if (diff >= 1 && diff <= 10)
+		{
+			ai.SetDifficulty(diff);
+			break;
+		}
+		else
+			std::cout << "Input invalid, please select the appropriate depth length." << std::endl;
+
 	}
 }
